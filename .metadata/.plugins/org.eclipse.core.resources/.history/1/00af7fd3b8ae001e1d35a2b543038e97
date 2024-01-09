@@ -35,7 +35,7 @@ public class QuestionController {
 @Autowired
 private QuestionService qservice;
 
-@PostMapping("/create-new-questio")
+@PostMapping("/create-new-question")
 public ResponseEntity<Question> createQuestion(@Valid @RequestBody Question question){
     Question createdQuestion = qservice.createQuestion(question);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdQuestion);
