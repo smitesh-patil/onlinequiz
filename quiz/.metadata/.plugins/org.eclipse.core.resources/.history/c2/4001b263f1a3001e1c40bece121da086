@@ -1,0 +1,15 @@
+package com.quiz.home.repositories;
+
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.quiz.home.pojos.Question;
+
+public interface QuestionRepositories extends JpaRepository<Question, Long> {
+
+	List<String> findDistinctSubject();
+
+	Page<Question> findBySubject(String subject, Pageable pageable);
+}

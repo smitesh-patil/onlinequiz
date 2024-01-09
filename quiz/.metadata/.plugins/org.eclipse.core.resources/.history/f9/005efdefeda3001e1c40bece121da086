@@ -1,0 +1,9 @@
+package com.quiz.home.service;
+
+import com.quiz.home.pojos.Question;
+
+public interface QuestionService {
+	Question createQuestion(Question ques);
+	List<Question> getAllQuestions();
+
+}

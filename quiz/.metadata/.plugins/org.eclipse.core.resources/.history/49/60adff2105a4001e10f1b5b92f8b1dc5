@@ -1,0 +1,82 @@
+package com.quiz.home.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.quiz.home.pojos.Question;
+import com.quiz.home.repositories.QuestionRepositories;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class QuestionServiceImpl implements QuestionService {
+
+	@Autowired
+	private QuestionRepositories qrepo;
+	@Override
+	public Question createQuestion(Question ques) {
+		// TODO Auto-generated method stub
+		return qrepo.save(ques);
+	}
+
+	@Override
+	public List<Question> getAllQuestions() {
+		// TODO Auto-generated method stub
+		return qrepo.findAll();
+	}
+
+	@Override
+	public Optional<Question> getQuestionById(Long id) {
+		// TODO Auto-generated method stub
+		return qrepo.findById(id);
+	}
+
+	@Override
+	public List<String> getAllSubjects() {
+		// TODO Auto-generated method stub
+		return qrepo.findDistinctSubject();
+	}
+
+	@Override
+	public Question updateQuestion(Long id, Question question) throws ChangeSetPersister.NotFoundException {
+		// TODO Auto-generated method stub
+		 Optional<Question> theQuestion = this.getQuestionById(id);
+		 if (theQuestion.isPresent()){
+	            Question updatedQuestion = theQuestion.get();
+	            updatedQuestion.setQuestion(question.getQuestion());
+	            updatedQuestion.setChoices(question.getChoices());
+	            updatedQuestion.setCorrectAnswers(question.getCorrectAnswers());
+	            return qrepo.save(updatedQuestion);
+	        }
+		 else
+		 {
+			 throw new ChangeSetPersister.NotFoundException();
+		 }
+		
+	}
+
+	@Override
+	public void deleteQuestion(Long id) {
+		// TODO Auto-generated method 
+		qrepo.deleteById(id);
+
+	}
+
+	@Override
+	public List<Question> getQuestionsForUser(Integer numOfQuestions, String subject) {
+		// TODO Auto-generated method stub
+		Pageable pageable = PageRequest.of(0, numOfQuestions);
+        return qrepo.findBySubject(subject, pageable).getContent();
+		//return null;
+	}
+
+}

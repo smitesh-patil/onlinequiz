@@ -1,0 +1,9 @@
+package com.quiz.home.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.quiz.home.pojos.Question;
+
+public interface QuestionRepositories extends JpaRepository<Question, Long> {
+
+}

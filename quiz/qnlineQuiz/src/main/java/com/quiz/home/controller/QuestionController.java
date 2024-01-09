@@ -1,0 +1,92 @@
+package com.quiz.home.controller;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.quiz.home.dtos.GetByIDResponse;
+import com.quiz.home.dtos.GetQuestionResponse;
+import com.quiz.home.dtos.UpdateQuestionReq;
+import com.quiz.home.pojos.Question;
+import com.quiz.home.service.QuestionService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/quizzes")
+@CrossOrigin("http://localhost:5173")
+public class QuestionController {
+@Autowired
+private QuestionService qservice;
+
+@PostMapping("/create-new-question")
+public ResponseEntity<Question> createQuestion(@Valid @RequestBody Question question){
+    Question createdQuestion = qservice.createQuestion(question);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdQuestion);
+}
+
+@GetMapping("/all-questions")
+public ResponseEntity<List<GetQuestionResponse>> getAllQuestions(){
+    List<GetQuestionResponse> questions = qservice.getAllQuestions();
+    return ResponseEntity.ok(questions);
+}
+
+
+@GetMapping("/question/{id}")
+public ResponseEntity<GetByIDResponse> getQuestionById(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
+    Optional<GetByIDResponse> theQuestion = qservice.getQuestionById(id);
+    if (theQuestion.isPresent()){
+        return ResponseEntity.ok(theQuestion.get());
+    }else {
+        throw new ChangeSetPersister.NotFoundException();
+    }
+}
+
+@PutMapping("/question/{id}/update")
+public ResponseEntity<Question> updateQuestion(
+        @PathVariable Long id, @RequestBody UpdateQuestionReq question) throws ChangeSetPersister.NotFoundException {
+    Question updatedQuestion = qservice.updateQuestion(id, question);
+    return ResponseEntity.ok(updatedQuestion);
+}
+
+@DeleteMapping("/question/{id}/delete")
+public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
+   qservice.deleteQuestion(id);
+    return ResponseEntity.noContent().build();
+}
+
+@GetMapping("/subjects")
+public ResponseEntity<List<String>> getAllSubjects(){
+    List<String> subjects = qservice.getAllSubjects();
+    return ResponseEntity.ok(subjects);
+}
+
+@GetMapping("/quiz/fetch-questions-for-user")
+public ResponseEntity<List<Question>> getQuestionsForUser(
+        @RequestParam Integer numOfQuestions, @RequestParam String subject){
+    List<Question> allQuestions = qservice.getQuestionsForUser(numOfQuestions, subject);
+
+    List<Question> mutableQuestions = new ArrayList<>(allQuestions);
+    Collections.shuffle(mutableQuestions);
+
+    int availableQuestions = Math.min(numOfQuestions, mutableQuestions.size());
+    List<Question> randomQuestions = mutableQuestions.subList(0, availableQuestions);
+    return ResponseEntity.ok(randomQuestions);
+}
+}

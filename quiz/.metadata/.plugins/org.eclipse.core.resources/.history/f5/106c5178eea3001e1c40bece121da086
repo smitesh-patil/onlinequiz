@@ -1,0 +1,16 @@
+package com.quiz.home.service;
+
+import java.util.List;
+
+import com.quiz.home.pojos.Question;
+
+public interface QuestionService {
+	Question createQuestion(Question ques);
+	List<Question> getAllQuestions();
+	 Optional<Question> getQuestionById(Long id);
+
+	    List<String> getAllSubjects();
+
+	
+
+}

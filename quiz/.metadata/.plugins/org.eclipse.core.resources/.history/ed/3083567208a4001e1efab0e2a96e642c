@@ -1,0 +1,13 @@
+package com.quiz.home.dtos;
+
+import jakarta.validation.constraints.NotBlank;
+
+public class GetByIDResponse {
+	
+    private String question;
+    
+    private String subject;
+    
+    private String questionType;
+
+}

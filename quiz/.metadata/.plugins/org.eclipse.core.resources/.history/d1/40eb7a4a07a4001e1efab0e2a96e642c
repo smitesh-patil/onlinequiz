@@ -1,0 +1,20 @@
+package com.quiz.home.dtos;
+
+import java.util.List;
+
+import jakarta.persistence.ElementCollection;
+import jakarta.validation.constraints.NotBlank;
+
+public class UpdateQuestionReq {
+	
+	    private String question;
+	   
+	    private String subject;
+	
+	    private String questionType;
+	    
+	   
+	    private List<String> choices;
+	  
+	    private List<String> correctAnswers;
+}

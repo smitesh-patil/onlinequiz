@@ -1,0 +1,7 @@
+package com.quiz.home.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface QuestionRepositories extends JpaRepository<T, ID> {
+
+}

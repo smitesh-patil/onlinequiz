@@ -1,0 +1,12 @@
+package com.quiz.home.dtos;
+
+import jakarta.validation.constraints.NotBlank;
+
+public class AddQuestion {
+	@NotBlank
+    private String question;
+    @NotBlank
+    private String subject;
+    @NotBlank
+    private String questionType;
+}

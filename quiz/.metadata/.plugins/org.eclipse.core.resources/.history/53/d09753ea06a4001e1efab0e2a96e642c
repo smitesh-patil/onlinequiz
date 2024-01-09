@@ -1,0 +1,26 @@
+package com.quiz.home.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.crossstore.ChangeSetPersister;
+
+import com.quiz.home.dtos.AddQuestion;
+import com.quiz.home.pojos.Question;
+
+public interface QuestionService {
+	Question createQuestion(AddQuestion ques);
+
+	List<Question> getAllQuestions();
+
+	Optional<Question> getQuestionById(Long id);
+
+	List<String> getAllSubjects();
+
+	Question updateQuestion(Long id, Question question) throws ChangeSetPersister.NotFoundException ;
+
+	void deleteQuestion(Long id);
+
+	List<Question> getQuestionsForUser(Integer numOfQuestions, String subject);
+
+}

@@ -1,0 +1,10 @@
+package com.quiz.home.dtos;
+
+public class GetQuestionResponse {
+private String question;
+    
+    private String subject;
+    
+    private String questionType;
+
+}
